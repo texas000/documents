@@ -1,0 +1,161 @@
+---
+title: General API Rules for LLM Context
+description: Machine-friendly API standards for LLM usage
+---
+
+# General API Rules for LLM Context
+
+This document outlines the general rules and standards for API interactions, designed to be machine-friendly and provide clear context for Language Model (LLM) processing. Adhering to these guidelines ensures consistency, predictability, and ease of integration across various services.
+
+---
+
+## 1. API Endpoint Naming Conventions
+
+- **RESTful Principles**: Use nouns to represent resources.
+- **Lowercase and Kebab-case**: Use lowercase letters and hyphens.
+- **Plural Nouns**: Use plural form for collections.
+- **Version Prefix**: Always prefix with API version.
+
+### Examples:
+
+```http
+GET /users
+GET /products/{productId}/reviews
+GET /v1/users
+GET /v2/products
+```
+
+## 2. Authentication and Authorization
+
+
+- **Token-based Authentication**: Prefer OAuth2, JWT.
+- **Authorization Header**: Use the Bearer scheme.
+- **Role-Based Access Control (RBAC)**: Implement RBAC for fine-grained control.
+
+### Examples:
+
+```Authorization: Bearer <your_token>```
+
+## 3. Request Body Rules
+
+- **Content-Type**: Must be application/json.
+- **Valid JSON**: Request body must be a valid JSON object.
+- **CamelCase Keys**: Use camelCase for all property names.
+- **Validation**: Incoming data should be validated against a schema.
+
+``` {
+  "firstName": "John",
+  "lastName": "Doe"
+} ```
+
+## 4. Header Rules
+
+| Header        | Required | Description                                          |
+| ------------- | -------- | ---------------------------------------------------- |
+| Authorization | Optional | Typically `Bearer <token>`                           |
+| Content-Type  | Required | `application/json` when sending body data            |
+| Accept        | Optional | Expected response format, usually `application/json` |
+| X-Request-ID  | Optional | Unique ID for tracing, echoed back in response       |
+
+## 5. Response Body Rules (Standard Structure)
+
+All API responses follow a standard structure:
+
+```
+{
+  "code": <integer>,
+  "message": "<string>",
+  "data": <object | array | null>
+}
+```
+
+### 📌 Field Descriptions
+
+- code: Business logic code
+
+- 0: Success
+
+- > 0: Client/business error
+
+- < 0: System/internal error
+
+- message: Human-readable status or error description
+
+- data: The result of the operation or null
+
+### 5.1 Success Responses
+
+Example: GET /users/{id}
+
+```
+{
+  "code": 0,
+  "message": "User fetched successfully.",
+  "data": {
+    "userId": "user123",
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "jane.doe@example.com"
+  }
+}
+```
+
+Example: POST /products
+
+```
+{
+  "code": 0,
+  "message": "Product created successfully.",
+  "data": {
+    "productId": "prod456",
+    "name": "New Widget",
+    "price": 29.99
+  }
+}
+```
+
+## 5.2 Error Responses
+
+400 – Validation Error
+
+```
+{
+  "code": 1001,
+  "message": "Validation failed.",
+  "data": {
+    "errors": [
+      { "field": "email", "message": "Invalid email format." },
+      { "field": "password", "message": "Password must be at least 8 characters long." }
+    ]
+  }
+}
+```
+
+404 – Not Found
+
+```
+{
+  "code": 2003,
+  "message": "Resource not found.",
+  "data": null
+}
+```
+
+500 – Internal Server Error
+```
+{
+  "code": -999,
+  "message": "An unexpected error occurred. Please try again later.",
+  "data": null
+}
+```
+
+## 6. Response Header Rules
+
+| Header        | Description                                                    |
+| ------------- | -------------------------------------------------------------- |
+| Content-Type  | Always `application/json`                                      |
+| Cache-Control | Use caching directives (e.g., `no-cache`, `max-age=3600`)      |
+| X-Request-ID  | If present in request, echoed in the response for traceability |
+| Date          | GMT timestamp when the response was generated                  |
+
