@@ -55,7 +55,7 @@ GET /v2/products
 
 All API responses follow a standard structure:
 
-```
+```ts
 {
   "code": <integer>,
   "message": "<string>",
@@ -81,7 +81,7 @@ All API responses follow a standard structure:
 
 Example: GET /users/{id}
 
-```
+```ts
 {
   "code": 0,
   "message": "User fetched successfully.",
@@ -96,7 +96,7 @@ Example: GET /users/{id}
 
 Example: POST /products
 
-```
+```ts
 {
   "code": 0,
   "message": "Product created successfully.",
@@ -112,7 +112,7 @@ Example: POST /products
 
 400 – Validation Error
 
-```
+```ts
 {
   "code": 1001,
   "message": "Validation failed.",
