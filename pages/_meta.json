@@ -1,8 +1,10 @@
 {
   "index": "Introduction",
   "another": "Another Page",
-  "api": "API Documents",
-  "advanced": "Advanced (A Folder)",
+  "api": {
+    "title": "API",
+    "type": "page"
+  },
   "about": {
     "title": "About",
     "type": "page"
